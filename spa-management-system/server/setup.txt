@@ -1,0 +1,20 @@
+Setup instructions for server (Node + MySQL)
+
+1. Install Node.js (18+) and MySQL server.
+2. Create a .env file in server/ by copying .env.example:
+   cd server
+   copy .env.example .env     (Windows)
+   # or
+   cp .env.example .env       (Mac/Linux)
+
+3. Since your MySQL password is blank, .env should work as-is.
+4. Create the database and tables:
+   Use MySQL CLI or a GUI (phpMyAdmin / MySQL Workbench):
+   mysql -u root < gym_management.sql
+
+5. Install server deps and start:
+   npm install
+   npm start
+
+API will run on http://localhost:4000
+GET /api/members will return sample members.

@@ -1,0 +1,1 @@
+Backend: run `npm install` then `npm start` in server/ folder. Ensure DB is created and .env configured.
