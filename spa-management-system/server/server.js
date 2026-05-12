@@ -21,10 +21,34 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const app = express();
-app.use(cors());
+
+// 🔥 FIXED CORS CONFIG
+const allowedOrigins = [
+  "https://glowai-management-system.onrender.com"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (like Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+// 🔥 IMPORTANT: handle preflight requests
+app.options("*", cors());
+
 app.use(express.json());
 
-// ROOT ROUTE (fixes "Cannot GET /")
+// ROOT ROUTE
 app.get("/", (req, res) => {
   res.json({ message: "GlowAI API is running 🚀" });
 });
@@ -44,7 +68,7 @@ app.use('/api/recommendations', recommendationsRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/chat', chatRoutes);
 
-// START SERVER (FIXED FOR RENDER)
+// START SERVER
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
