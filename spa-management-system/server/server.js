@@ -1,20 +1,21 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 
-import customerRoutes from './routes/customer.js';
-import checkinRoutes from './routes/checkins.js';
-import staffRoutes from './routes/staff.js';
-import paymentRoutes from './routes/payments.js';
-import authRoutes from './routes/auth.js';
-import auditRoutes from './routes/audit.js';
-import inventoryRoutes from './routes/inventory.js';
-import salesRoutes from './routes/sales.js';
-import appointmentRoutes from './routes/appointments.js';
-import servicesRoutes from './routes/services.js';
-import recommendationsRoutes from './routes/recommendations.js';
-import reportsRoutes from './routes/reports.js';
-import chatRoutes from './routes/chat.js';
+// Routes
+import customerRoutes from "./routes/customer.js";
+import checkinRoutes from "./routes/checkins.js";
+import staffRoutes from "./routes/staff.js";
+import paymentRoutes from "./routes/payments.js";
+import authRoutes from "./routes/auth.js";
+import auditRoutes from "./routes/audit.js";
+import inventoryRoutes from "./routes/inventory.js";
+import salesRoutes from "./routes/sales.js";
+import appointmentRoutes from "./routes/appointments.js";
+import servicesRoutes from "./routes/services.js";
+import recommendationsRoutes from "./routes/recommendations.js";
+import reportsRoutes from "./routes/reports.js";
+import chatRoutes from "./routes/chat.js";
 
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
@@ -22,53 +23,51 @@ if (process.env.NODE_ENV !== "production") {
 
 const app = express();
 
-// 🔥 FIXED CORS CONFIG
-const allowedOrigins = [
-  "https://glowai-management-system.onrender.com"
-];
-
-app.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (like Postman)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-
-    return callback(new Error("Not allowed by CORS"));
-  },
-  credentials: true,
+/* =========================
+   CORS FIX (IMPORTANT)
+========================= */
+const corsOptions = {
+  origin: "https://glowai-management-system.onrender.com",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+};
 
-// 🔥 IMPORTANT: handle preflight requests
-app.options("*", cors());
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
+/* =========================
+   MIDDLEWARE
+========================= */
 app.use(express.json());
 
-// ROOT ROUTE
+/* =========================
+   ROOT ROUTE
+========================= */
 app.get("/", (req, res) => {
   res.json({ message: "GlowAI API is running 🚀" });
 });
 
-// ROUTES
-app.use('/api/customer', customerRoutes);
-app.use('/api/checkins', checkinRoutes);
-app.use('/api/staff', staffRoutes);
-app.use('/api/payments', paymentRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/audit', auditRoutes);
-app.use('/api/inventory', inventoryRoutes);
-app.use('/api/sales', salesRoutes);
-app.use('/api/appointments', appointmentRoutes);
-app.use('/api/services', servicesRoutes);
-app.use('/api/recommendations', recommendationsRoutes);
-app.use('/api/reports', reportsRoutes);
-app.use('/api/chat', chatRoutes);
+/* =========================
+   ROUTES
+========================= */
+app.use("/api/customer", customerRoutes);
+app.use("/api/checkins", checkinRoutes);
+app.use("/api/staff", staffRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/audit", auditRoutes);
+app.use("/api/inventory", inventoryRoutes);
+app.use("/api/sales", salesRoutes);
+app.use("/api/appointments", appointmentRoutes);
+app.use("/api/services", servicesRoutes);
+app.use("/api/recommendations", recommendationsRoutes);
+app.use("/api/reports", reportsRoutes);
+app.use("/api/chat", chatRoutes);
 
-// START SERVER
+/* =========================
+   START SERVER (RENDER SAFE)
+========================= */
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
