@@ -16,15 +16,20 @@ import recommendationsRoutes from './routes/recommendations.js';
 import reportsRoutes from './routes/reports.js';
 import chatRoutes from './routes/chat.js';
 
-
-
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// REGISTER ROUTES
+// ROOT ROUTE (fixes "Cannot GET /")
+app.get("/", (req, res) => {
+  res.json({ message: "GlowAI API is running 🚀" });
+});
+
+// ROUTES
 app.use('/api/customer', customerRoutes);
 app.use('/api/checkins', checkinRoutes);
 app.use('/api/staff', staffRoutes);
@@ -39,6 +44,9 @@ app.use('/api/recommendations', recommendationsRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/chat', chatRoutes);
 
+// START SERVER (FIXED FOR RENDER)
+const PORT = process.env.PORT || 5000;
 
-// START SERVER
-app.listen(5000, () => console.log('Server running on port 5000'));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

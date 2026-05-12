@@ -1,27 +1,34 @@
-import dotenv from 'dotenv';
-import mysql from 'mysql2'
-import path from 'path';
-import { fileURLToPath } from 'url';
+import dotenv from "dotenv";
+import mysql from "mysql2";
+import { fileURLToPath } from "url";
+import path from "path";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Only load .env locally (NOT needed on Render)
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
 
-dotenv.config({ path: path.resolve(__dirname, './.env') });
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT || 3306),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306,
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'spa_management'
-})
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
 
-db.connect((err) => {
+// Test connection safely
+pool.getConnection((err, connection) => {
   if (err) {
-    console.error('❌ Database connection failed:', err)
-  } else {
-    console.log(`✅ Connected to MySQL database at ${process.env.DB_HOST || 'localhost'}`)
+    console.error("❌ Database connection failed:", err.message);
+    return;
   }
-})
 
-export default db
+  console.log("✅ MySQL connected successfully");
+  connection.release();
+});
+
+export default pool;
