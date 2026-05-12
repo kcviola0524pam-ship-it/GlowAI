@@ -370,7 +370,7 @@ export default function POS() {
 
   return (
     <div 
-      className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 min-h-screen p-4 sm:p-6"
+      className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 min-h-screen w-full max-w-full min-w-0 p-3 sm:p-4 md:p-6"
       style={{
         background: darkMode 
           ? `linear-gradient(to bottom, ${adminColors.darkGradientStart}, ${adminColors.darkGradientMiddle}, ${adminColors.darkGradientEnd})`
@@ -379,7 +379,7 @@ export default function POS() {
       }}
     >
       {/* Products/Services Section */}
-      <div className="lg:col-span-2 space-y-4">
+      <div className="lg:col-span-2 space-y-4 min-w-0">
         <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-sm p-3 sm:p-4">
           {/* Tabs */}
           <div className="flex border-b dark:border-gray-700 mb-4">
@@ -511,7 +511,7 @@ export default function POS() {
       </div>
 
       {/* Cart Section */}
-      <div className="space-y-4">
+      <div className="space-y-4 min-w-0">
         <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-sm p-3 sm:p-4">
           <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-gray-900 dark:text-white">Cart</h2>
 
@@ -619,8 +619,8 @@ export default function POS() {
 
       {/* Receipt Modal */}
       {showReceipt && receipt && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 p-4">
-          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 flex items-end sm:items-center justify-center bg-black/50 z-50 p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-lg p-4 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto my-auto">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Receipt</h3>
               <button
@@ -634,7 +634,7 @@ export default function POS() {
             <div id="receipt-content" className="space-y-4">
               {/* Receipt Header */}
               <div className="text-center border-b dark:border-gray-700 pb-4">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">WCM HAIR AND NAIL SALON</h2>
+                <h2 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white break-words px-1">WCM HAIR AND NAIL SALON</h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Management System</p>
                 <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
                   Transaction: {receipt.transaction_number}

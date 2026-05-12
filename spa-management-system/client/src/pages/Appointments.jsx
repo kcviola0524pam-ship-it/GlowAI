@@ -83,7 +83,7 @@ export default function Appointments() {
 
   return (
     <div 
-      className="space-y-4 sm:space-y-6 min-h-screen p-4 sm:p-6"
+      className="space-y-4 sm:space-y-6 min-h-screen w-full max-w-full min-w-0 p-3 sm:p-4 md:p-6"
       style={{
         background: darkMode 
           ? `linear-gradient(to bottom, ${adminColors.darkGradientStart}, ${adminColors.darkGradientMiddle}, ${adminColors.darkGradientEnd})`
@@ -105,7 +105,7 @@ export default function Appointments() {
               </div>
               Appointments Management
             </h2>
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-gray-700/50 rounded-xl backdrop-blur-sm border border-gray-200 dark:border-gray-600 shadow-sm">
+            <div className="flex flex-wrap items-center gap-2 px-3 sm:px-4 py-2 bg-white/50 dark:bg-gray-700/50 rounded-xl backdrop-blur-sm border border-gray-200 dark:border-gray-600 shadow-sm max-w-full">
               <span className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300">Total:</span>
               <span className="text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400">{appointments.length}</span>
               <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">|</span>

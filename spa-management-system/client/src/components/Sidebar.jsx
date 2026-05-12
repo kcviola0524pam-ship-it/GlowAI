@@ -27,7 +27,7 @@ export default function Sidebar({ setView, view, allowedViews }) {
       {/* Mobile menu button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-blue-900 dark:bg-gray-900 text-white rounded-lg shadow-lg"
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-blue-900 dark:bg-gray-900 text-white rounded-lg shadow-lg"
         aria-label="Toggle menu"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -42,15 +42,15 @@ export default function Sidebar({ setView, view, allowedViews }) {
       {/* Overlay for mobile */}
       {isOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black/50 z-40"
+          className="md:hidden fixed inset-0 bg-black/50 z-40"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-40 w-64 p-6 space-y-6 transform transition-transform duration-300 ease-in-out shadow-2xl border-r border-blue-300/50 dark:border-blue-700/50 relative overflow-hidden ${
-          isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        className={`fixed md:static inset-y-0 left-0 z-40 w-64 max-w-[85vw] shrink-0 p-4 sm:p-6 space-y-6 transform transition-transform duration-300 ease-in-out shadow-2xl border-r border-blue-300/50 dark:border-blue-700/50 relative overflow-hidden md:min-h-screen ${
+          isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
         style={{
           background: darkMode 

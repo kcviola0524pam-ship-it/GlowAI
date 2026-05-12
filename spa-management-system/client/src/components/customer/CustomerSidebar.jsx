@@ -6,7 +6,7 @@ const tabs = [
 
 export default function CustomerSidebar({ active, onChange }) {
   return (
-    <div className="w-56 bg-gray-100 dark:bg-gray-700 rounded-xl shadow-sm p-4 space-y-3">
+    <div className="w-full sm:w-56 shrink-0 bg-gray-100 dark:bg-gray-700 rounded-xl shadow-sm p-4 space-y-3">
       <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Customer Tools</p>
       <nav className="space-y-2">
         {tabs.map((tab) => (

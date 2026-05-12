@@ -9,7 +9,7 @@ export default function Header() {
 
   return (
     <header 
-      className="relative flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b border-blue-300/50 dark:border-blue-700/50 shadow-lg backdrop-blur-sm overflow-hidden"
+      className="relative flex items-center justify-between pr-3 sm:pr-6 max-md:pl-14 md:px-6 py-3 sm:py-4 border-b border-blue-300/50 dark:border-blue-700/50 shadow-lg backdrop-blur-sm overflow-hidden min-w-0 shrink-0"
       style={{
         background: darkMode 
           ? `linear-gradient(to right, ${customColors.darkGradientStart}, ${customColors.darkGradientMiddle}, ${customColors.darkGradientEnd})`
@@ -20,7 +20,7 @@ export default function Header() {
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent"></div>
       
       {/* Salon Logo */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0 shrink">
         {logo ? (
           <img src={logo} alt="Salon Logo" className="w-10 h-10 flex-shrink-0 object-contain" />
         ) : (
@@ -43,7 +43,7 @@ export default function Header() {
       </div>
       
       {/* Salon decorative elements in header empty space */}
-      <div className="absolute left-32 sm:left-48 top-1/2 -translate-y-1/2 flex items-center gap-4 opacity-20 pointer-events-none">
+      <div className="hidden md:flex absolute left-32 lg:left-48 top-1/2 -translate-y-1/2 items-center gap-4 opacity-20 pointer-events-none">
         {/* Scissors icon */}
         <svg className="w-8 h-8 text-blue-300 animate-rotate-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z" />
@@ -59,7 +59,7 @@ export default function Header() {
       </div>
       
       {user && (
-        <div className="relative flex items-center gap-2 sm:gap-4 lg:gap-8 w-full justify-end">
+        <div className="relative flex items-center gap-2 sm:gap-4 lg:gap-6 min-w-0 flex-1 justify-end">
           <button
             onClick={toggleDarkMode}
             className="group p-2.5 rounded-xl hover:bg-white/30 dark:hover:bg-white/10 transition-all duration-300 hover:scale-110 backdrop-blur-sm border border-blue-300/50 dark:border-yellow-200/20"

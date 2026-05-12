@@ -225,7 +225,7 @@ export default function Dashboard() {
 
   return (
     <div 
-      className="space-y-4 sm:space-y-6 animate-fadeIn min-h-screen p-4 sm:p-6"
+      className="space-y-4 sm:space-y-6 animate-fadeIn min-h-screen w-full max-w-full min-w-0 p-3 sm:p-4 md:p-6"
       style={{
         background: darkMode 
           ? `linear-gradient(to bottom, ${adminColors.darkGradientStart}, ${adminColors.darkGradientMiddle}, ${adminColors.darkGradientEnd})`
@@ -235,7 +235,7 @@ export default function Dashboard() {
     >
       {/* Week Selector */}
       <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-sm p-4 sm:p-6">
-        <div className="flex items-center justify-between flex-wrap gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 flex-wrap">
           <div>
             <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white">Dashboard Reports</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{getCurrentDateRange()}</p>
@@ -295,7 +295,7 @@ export default function Dashboard() {
                 </div>
               </div>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 {[0, 1, 2, 3, 4].map((week) => (
                   <button
                     key={week}
@@ -322,9 +322,9 @@ export default function Dashboard() {
       ) : (
         <>
           {/* Sales Report */}
-          <div className="relative bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-2xl border-2 border-transparent bg-clip-padding overflow-hidden card-3d group">
+          <div className="relative bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-2xl border-2 border-transparent bg-clip-padding overflow-hidden card-3d group w-full min-w-0">
             <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-green-500 via-blue-500 to-purple-500 animate-shimmer"></div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
               <h3 className="text-base sm:text-lg font-bold gradient-text dark:text-white flex items-center gap-2">
                 <div className="p-2 bg-gradient-to-br from-green-500 to-blue-500 rounded-lg shadow-lg">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -437,9 +437,9 @@ export default function Dashboard() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6 w-full min-w-0">
             {/* Sales Graph */}
-            <div className="relative bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-2xl border-2 border-transparent bg-clip-padding overflow-hidden card-3d group">
+            <div className="relative bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-2xl border-2 border-transparent bg-clip-padding overflow-hidden card-3d group min-w-0 w-full">
               <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-green-500 via-blue-500 to-purple-500 animate-shimmer"></div>
               <h3 className="text-base sm:text-lg font-bold mb-4 gradient-text dark:text-white flex items-center gap-2">
                 <div className="p-2 bg-gradient-to-br from-green-500 to-blue-500 rounded-lg shadow-lg">
@@ -481,7 +481,7 @@ export default function Dashboard() {
             </div>
 
             {/* Peak Days Report */}
-            <div className="relative bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-2xl border-2 border-transparent bg-clip-padding overflow-hidden card-3d group">
+            <div className="relative bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-2xl border-2 border-transparent bg-clip-padding overflow-hidden card-3d group min-w-0 w-full">
               <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-purple-500 to-pink-500 animate-shimmer"></div>
               <h3 className="text-base sm:text-lg font-bold mb-4 gradient-text dark:text-white flex items-center gap-2">
                 <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg shadow-lg">
@@ -517,7 +517,7 @@ export default function Dashboard() {
             </div>
 
             {/* Peak Hours Report */}
-            <div className="relative bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-2xl border-2 border-transparent bg-clip-padding overflow-hidden card-3d group">
+            <div className="relative bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-2xl border-2 border-transparent bg-clip-padding overflow-hidden card-3d group min-w-0 w-full">
               <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-green-500 animate-shimmer"></div>
               <h3 className="text-base sm:text-lg font-bold mb-4 gradient-text dark:text-white flex items-center gap-2">
                 <div className="p-2 bg-gradient-to-br from-blue-500 to-green-500 rounded-lg shadow-lg">

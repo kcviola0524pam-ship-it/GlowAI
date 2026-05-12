@@ -168,7 +168,7 @@ export default function AIChat({ customerId, onRecommendations, isAdmin = false,
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className={`fixed bottom-6 right-6 ${isAdmin ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700' : 'bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700'} text-white rounded-full p-4 shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 z-50 flex items-center gap-2 group`}
+          className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 relative ${isAdmin ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700' : 'bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700'} text-white rounded-full p-3 sm:p-4 shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 z-50 flex items-center gap-2 group max-w-[calc(100vw-2rem)]`}
           title={isAdmin ? "Business Intelligence Assistant" : "Chat with GlamAI"}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,10 +185,10 @@ export default function AIChat({ customerId, onRecommendations, isAdmin = false,
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-96 max-w-[calc(100vw-3rem)] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl flex flex-col border border-gray-200 dark:border-gray-700 z-50 animate-fadeIn">
+        <div className="fixed inset-x-3 bottom-3 sm:inset-x-auto sm:left-auto sm:right-6 sm:bottom-6 z-50 flex flex-col w-auto sm:w-96 max-h-[85vh] sm:max-h-[600px] max-w-[calc(100vw-1.5rem)] sm:max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 animate-fadeIn overflow-hidden">
           {/* Header */}
-          <div className={`${isAdmin ? 'bg-gradient-to-r from-purple-600 to-indigo-600' : 'bg-gradient-to-r from-blue-600 to-green-600'} text-white p-4 rounded-t-2xl flex justify-between items-center`}>
-            <div className="flex items-center gap-2">
+          <div className={`${isAdmin ? 'bg-gradient-to-r from-purple-600 to-indigo-600' : 'bg-gradient-to-r from-blue-600 to-green-600'} text-white p-3 sm:p-4 rounded-t-2xl flex justify-between items-center gap-2 shrink-0 min-w-0`}>
+            <div className="flex items-center gap-2 min-w-0">
               <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
                 {isAdmin ? (
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -200,8 +200,8 @@ export default function AIChat({ customerId, onRecommendations, isAdmin = false,
                   </svg>
                 )}
               </div>
-              <div>
-                <h3 className="font-semibold">{isAdmin ? 'Business Intelligence' : 'Glam recommendations'}</h3>
+              <div className="min-w-0">
+                <h3 className="font-semibold text-sm sm:text-base truncate">{isAdmin ? 'Business Intelligence' : 'Glam recommendations'}</h3>
                 <p className="text-xs text-white/80">{isAdmin ? 'Data-driven insights' : 'Your wellness partner'}</p>
               </div>
             </div>
@@ -228,7 +228,7 @@ export default function AIChat({ customerId, onRecommendations, isAdmin = false,
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-[300px] max-h-[400px]">
+          <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-4">
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -262,7 +262,7 @@ export default function AIChat({ customerId, onRecommendations, isAdmin = false,
           </div>
 
           {/* Input Form */}
-          <form onSubmit={handleSend} className="p-4 border-t border-gray-200 dark:border-gray-700">
+          <form onSubmit={handleSend} className="p-3 sm:p-4 border-t border-gray-200 dark:border-gray-700 shrink-0">
             {recommendations && recommendations.length > 0 && (
               <button
                 type="button"

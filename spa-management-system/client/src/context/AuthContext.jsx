@@ -39,10 +39,16 @@ export const AuthProvider = ({ children }) => {
     setAuthError('');
     try {
       const { data } = await axios.post(`${API_BASE_URL}/api/auth/login`, credentials);
+      if (!data || typeof data !== 'object' || !data.token || data.user == null) {
+        const msg =
+          'Login response was invalid. If you use VITE_API_URL, include https:// (e.g. https://your-api.railway.app).';
+        setAuthError(msg);
+        throw new Error(msg);
+      }
       storeSession(data);
       return data.user;
     } catch (err) {
-      setAuthError(err.response?.data?.error || 'Unable to login.');
+      setAuthError(err.response?.data?.error || err.message || 'Unable to login.');
       throw err;
     }
   };
@@ -51,10 +57,16 @@ export const AuthProvider = ({ children }) => {
     setAuthError('');
     try {
       const { data } = await axios.post(`${API_BASE_URL}/api/auth/signup`, payload);
+      if (!data || typeof data !== 'object' || !data.token || data.user == null) {
+        const msg =
+          'Sign-up response was invalid. If you use VITE_API_URL, include https:// (e.g. https://your-api.railway.app).';
+        setAuthError(msg);
+        throw new Error(msg);
+      }
       storeSession(data);
       return data.user;
     } catch (err) {
-      setAuthError(err.response?.data?.error || 'Unable to sign up.');
+      setAuthError(err.response?.data?.error || err.message || 'Unable to sign up.');
       throw err;
     }
   };

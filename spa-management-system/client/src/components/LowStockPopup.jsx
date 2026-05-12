@@ -45,7 +45,7 @@ export default function LowStockPopup({ setView, onClose }) {
   if (!isVisible || lowStockItems.length === 0) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 max-w-md w-full sm:w-96 animate-slideUp">
+    <div className="fixed bottom-4 left-4 right-4 z-50 sm:left-auto sm:right-4 sm:bottom-4 sm:max-w-md sm:w-96 animate-slideUp">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-2 border-red-500 overflow-hidden">
         {/* Header */}
         <div className="bg-red-500 text-white px-4 py-3 flex items-center justify-between">

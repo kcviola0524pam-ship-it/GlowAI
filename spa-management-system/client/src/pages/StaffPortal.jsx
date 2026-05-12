@@ -106,7 +106,7 @@ export default function StaffPortal({ activeTab: propActiveTab }) {
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-4 sm:space-y-6 w-full min-w-0 max-w-full">
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 sm:p-6">
         <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white">Staff Portal</h2>
         <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-1">

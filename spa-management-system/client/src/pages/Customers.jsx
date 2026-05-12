@@ -140,13 +140,13 @@ export default function Customers() {
 
   const OverviewPanel = () => (
     <div className="space-y-4">
-      <div className="flex flex-col lg:flex-row gap-4">
-        <div className="flex-1 relative bg-gradient-to-br from-white via-blue-50/30 to-green-50/30 dark:from-gray-800 dark:via-blue-900/20 dark:to-green-900/20 rounded-2xl shadow-2xl border-2 border-transparent bg-clip-padding overflow-hidden card-3d pattern-dots">
+      <div className="flex flex-col lg:flex-row gap-4 min-w-0">
+        <div className="flex-1 min-w-0 relative bg-gradient-to-br from-white via-blue-50/30 to-green-50/30 dark:from-gray-800 dark:via-blue-900/20 dark:to-green-900/20 rounded-2xl shadow-2xl border-2 border-transparent bg-clip-padding overflow-hidden card-3d pattern-dots">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-green-500/5 to-purple-500/5"></div>
           <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-green-500 to-purple-500 animate-shimmer"></div>
           <div className="relative z-10 p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold gradient-text dark:text-white flex items-center gap-2">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+              <h3 className="text-lg font-bold gradient-text dark:text-white flex items-center gap-2 shrink-0">
                 <div className="p-1.5 bg-gradient-to-br from-blue-500 to-green-500 rounded-lg shadow-md">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -154,9 +154,9 @@ export default function Customers() {
                 </div>
                 Customers
               </h3>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:w-auto min-w-0">
                 <select
-                  className="border-2 border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 shadow-sm"
+                  className="border-2 border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 shadow-sm w-full sm:w-auto min-w-0"
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
                 >
@@ -165,15 +165,15 @@ export default function Customers() {
                   <option value="Inactive">Inactive</option>
                 </select>
                 <input
-                  className="border-2 border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2 text-sm dark:bg-gray-700 dark:text-white bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 shadow-sm hover:shadow-md w-40 sm:w-48"
+                  className="border-2 border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2 text-sm dark:bg-gray-700 dark:text-white bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 shadow-sm hover:shadow-md flex-1 min-w-0 sm:max-w-xs"
                   placeholder="🔍 Search customer"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
             </div>
-            <div className="overflow-auto max-h-80 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
-              <table className="w-full text-left text-sm">
+            <div className="overflow-x-auto max-h-80 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm min-w-0">
+              <table className="w-full text-left text-sm min-w-[520px]">
                 <thead className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-gray-700 dark:to-gray-700 border-b-2 border-gray-200 dark:border-gray-600">
                   <tr>
                     <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Name</th>
@@ -267,11 +267,11 @@ export default function Customers() {
             
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
                   Showing {startIndex + 1} to {Math.min(endIndex, filteredCustomers.length)} of {filteredCustomers.length} customers
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-center sm:justify-end gap-2 flex-wrap">
                   <button
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
@@ -295,7 +295,7 @@ export default function Customers() {
           </div>
         </div>
 
-        <div className="w-full lg:w-80 relative bg-gradient-to-br from-white via-blue-50/30 to-green-50/30 dark:from-gray-800 dark:via-blue-900/20 dark:to-green-900/20 rounded-2xl shadow-2xl border-2 border-transparent bg-clip-padding overflow-hidden card-3d pattern-grid">
+        <div className="w-full lg:w-80 shrink-0 min-w-0 relative bg-gradient-to-br from-white via-blue-50/30 to-green-50/30 dark:from-gray-800 dark:via-blue-900/20 dark:to-green-900/20 rounded-2xl shadow-2xl border-2 border-transparent bg-clip-padding overflow-hidden card-3d pattern-grid">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-green-500/5 to-purple-500/5"></div>
           <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-green-500 to-purple-500 animate-shimmer"></div>
           <div className="absolute -top-2 -right-2 w-32 h-32 bg-green-400/20 rounded-full blur-3xl animate-pulse"></div>
@@ -368,7 +368,7 @@ export default function Customers() {
 
   return (
     <div 
-      className="space-y-4 min-h-screen p-4 sm:p-6"
+      className="space-y-4 min-h-screen w-full max-w-full min-w-0 p-3 sm:p-4 md:p-6"
       style={{
         background: darkMode 
           ? `linear-gradient(to bottom, ${adminColors.darkGradientStart}, ${adminColors.darkGradientMiddle}, ${adminColors.darkGradientEnd})`
@@ -392,9 +392,9 @@ export default function Customers() {
         onRefresh={fetchCustomers}
       />
 
-      <div className="flex flex-col lg:flex-row gap-4">
+      <div className="flex flex-col lg:flex-row gap-4 min-w-0">
         <CustomerSidebar active={activePanel} onChange={setActivePanel} />
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           {activePanel === 'overview' && <OverviewPanel />}
         </div>
       </div>

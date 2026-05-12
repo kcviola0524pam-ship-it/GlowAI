@@ -2,30 +2,30 @@ import React from 'react';
 
 export default function CustomerHeader({ customer, onAdd, onRefresh }) {
   return (
-    <div className="bg-gray-100 dark:bg-gray-700 rounded-xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
-      <div>
+    <div className="bg-gray-100 dark:bg-gray-700 rounded-xl p-4 shadow-sm flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+      <div className="min-w-0 flex-1">
         <p className="text-sm text-gray-500 dark:text-gray-400">Selected customer</p>
         <p className="text-2xl font-semibold text-gray-900 dark:text-white">
           {customer ? customer.name : 'Select a customer'}
         </p>
         {customer && (
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-gray-500 dark:text-gray-400 break-words">
             Service preferred: <span className="font-medium text-gray-800 dark:text-white">{customer.service}</span> • Status:{' '}
             <span className="font-medium text-gray-800 dark:text-white">{customer.status}</span>
           </p>
         )}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto shrink-0">
         <button
           onClick={onRefresh}
-          className="px-4 py-2 border rounded text-gray-900 dark:text-white hover:bg-gray-50 text-sm"
+          className="px-4 py-2 border rounded text-gray-900 dark:text-white hover:bg-gray-50 text-sm w-full sm:w-auto"
         >
           Refresh
         </button>
         <button
           onClick={onAdd}
-          className="px-4 py-2 bg-green-600 text-white rounded text-sm shadow-sm"
+          className="px-4 py-2 bg-green-600 text-white rounded text-sm shadow-sm w-full sm:w-auto"
         >
           + Add Customer
         </button>

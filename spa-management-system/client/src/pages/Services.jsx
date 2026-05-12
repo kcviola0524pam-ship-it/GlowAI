@@ -123,7 +123,7 @@ export default function Services() {
 
   return (
     <div 
-      className="space-y-4 sm:space-y-6 min-h-screen p-4 sm:p-6"
+      className="space-y-4 sm:space-y-6 min-h-screen w-full max-w-full min-w-0 p-3 sm:p-4 md:p-6"
       style={{
         background: darkMode 
           ? `linear-gradient(to bottom, ${adminColors.darkGradientStart}, ${adminColors.darkGradientMiddle}, ${adminColors.darkGradientEnd})`

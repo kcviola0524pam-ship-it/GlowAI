@@ -41,7 +41,7 @@ const viewMap = {
 const AuthScreens = () => {
   const [mode, setMode] = useState('login');
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-6">
+    <div className="min-h-screen min-w-0 bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 sm:p-6 w-full">
       {mode === 'login' ? (
         <Login onSwitch={() => setMode('signup')} />
       ) : (
@@ -64,11 +64,11 @@ const staffViews = {
 const CustomerShell = () => {
   const [active, setActive] = useState('home');
   return (
-    <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen flex w-full min-w-0 max-w-full overflow-x-hidden bg-gray-50 dark:bg-gray-900">
       <CustomerNav active={active} onChange={setActive} />
-      <div className="flex-1 flex flex-col lg:ml-0">
+      <div className="flex-1 flex flex-col min-w-0 w-full max-w-full">
         <Header />
-        <main className="p-3 sm:p-4 lg:p-6 flex-1 bg-gray-50 dark:bg-gray-900">{customerViews[active] || <CustomerHome />}</main>
+        <main className="p-3 sm:p-4 lg:p-6 flex-1 min-w-0 w-full bg-gray-50 dark:bg-gray-900">{customerViews[active] || <CustomerHome />}</main>
       </div>
     </div>
   );
@@ -77,11 +77,11 @@ const CustomerShell = () => {
 const StaffShell = () => {
   const [active, setActive] = useState('bookings');
   return (
-    <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen flex w-full min-w-0 max-w-full overflow-x-hidden bg-gray-50 dark:bg-gray-900">
       <StaffNav active={active} onChange={setActive} />
-      <div className="flex-1 flex flex-col lg:ml-0">
+      <div className="flex-1 flex flex-col min-w-0 w-full max-w-full">
         <Header />
-        <main className="p-3 sm:p-4 lg:p-6 flex-1 bg-gray-50 dark:bg-gray-900">
+        <main className="p-3 sm:p-4 lg:p-6 flex-1 min-w-0 w-full bg-gray-50 dark:bg-gray-900">
           <StaffPortal activeTab={active} />
         </main>
       </div>
@@ -115,11 +115,11 @@ const Shell = () => {
   if (user.role === 'staff') return <StaffShell />;
 
   return (
-    <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen flex w-full min-w-0 max-w-full overflow-x-hidden bg-gray-50 dark:bg-gray-900">
       <Sidebar setView={setView} view={view} allowedViews={user?.role === 'admin' ? [...(permissions || []), 'walkins', 'reports', 'ai-recommendations'] : (permissions || [])} />
-      <div className="flex-1 flex flex-col lg:ml-0">
+      <div className="flex-1 flex flex-col min-w-0 w-full max-w-full">
         <Header />
-        <main className="p-3 sm:p-4 lg:p-6">{currentView}</main>
+        <main className="p-3 sm:p-4 lg:p-6 flex-1 min-w-0 w-full">{currentView}</main>
       </div>
       {/* Admin AI Chatbot */}
       {user?.role === 'admin' && <AIChat isAdmin={true} />}
