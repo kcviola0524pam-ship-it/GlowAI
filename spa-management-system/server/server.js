@@ -32,6 +32,7 @@ const defaultOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
   "https://glowai-management-system.onrender.com",
+  "https://glowai-app.onrender.com",
 ];
 const fromEnv = (process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGIN || "")
   .split(",")
