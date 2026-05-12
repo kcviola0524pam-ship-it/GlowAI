@@ -117,14 +117,12 @@ const Shell = () => {
   return (
     <div className="min-h-screen flex w-full min-w-0 max-w-full overflow-x-hidden bg-gray-50 dark:bg-gray-900">
       <Sidebar setView={setView} view={view} allowedViews={user?.role === 'admin' ? [...(permissions || []), 'walkins', 'reports', 'ai-recommendations'] : (permissions || [])} />
-      <div className="flex-1 flex flex-col min-w-0 w-full max-w-full">
+      <div className="relative flex flex-1 flex-col min-w-0 w-full max-w-full">
         <Header />
         <main className="p-3 sm:p-4 lg:p-6 flex-1 min-w-0 w-full">{currentView}</main>
+        {user?.role === 'admin' && <AIChat isAdmin={true} />}
+        {user?.role === 'admin' && <LowStockPopup setView={setView} />}
       </div>
-      {/* Admin AI Chatbot */}
-      {user?.role === 'admin' && <AIChat isAdmin={true} />}
-      {/* Low Stock Popup */}
-      {user?.role === 'admin' && <LowStockPopup setView={setView} />}
     </div>
   );
 };
