@@ -39,8 +39,32 @@ const fromEnv = (process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGIN || "")
   .filter(Boolean);
 const allowedOrigins = [...new Set([...defaultOrigins, ...fromEnv])];
 
+const isAllowedOrigin = (origin) => {
+  if (!origin || typeof origin !== "string") return false;
+  return allowedOrigins.includes(origin.trim());
+};
+
+/** Answer browser preflight before any other middleware so headers are never skipped. */
+app.use((req, res, next) => {
+  if (req.method !== "OPTIONS") return next();
+  const origin = req.headers.origin;
+  if (!isAllowedOrigin(origin)) return next();
+  res.setHeader("Access-Control-Allow-Origin", origin);
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT,PATCH,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept");
+  res.setHeader("Access-Control-Max-Age", "86400");
+  res.setHeader("Vary", "Origin");
+  return res.status(204).end();
+});
+
 const corsOptions = {
-  origin: allowedOrigins,
+  origin: (requestOrigin, callback) => {
+    if (!requestOrigin || isAllowedOrigin(requestOrigin)) {
+      return callback(null, true);
+    }
+    return callback(null, false);
+  },
   methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "Accept"],
   credentials: true,

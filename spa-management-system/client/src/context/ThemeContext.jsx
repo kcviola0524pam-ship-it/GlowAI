@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import { readStoredJson } from '../utils/readStoredJson';
 
 const ThemeContext = createContext(null);
 
@@ -20,26 +21,22 @@ const defaultPortalColors = {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [darkMode, setDarkMode] = useState(() => {
-    const stored = localStorage.getItem('darkMode');
-    return stored ? JSON.parse(stored) : false;
-  });
+  const [darkMode, setDarkMode] = useState(() => readStoredJson('darkMode', false));
 
   const [portalColors, setPortalColors] = useState(() => {
-    const stored = localStorage.getItem('portalColors');
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      // Migrate old format to new format if needed
-      if (parsed.gradientStart && !parsed.admin) {
-        return {
-          admin: parsed,
-          customer: parsed,
-          staff: parsed,
-        };
-      }
-      return parsed;
+    const parsed = readStoredJson('portalColors', null);
+    if (!parsed || typeof parsed !== 'object') {
+      return defaultPortalColors;
     }
-    return defaultPortalColors;
+    // Migrate old format to new format if needed
+    if (parsed.gradientStart && !parsed.admin) {
+      return {
+        admin: parsed,
+        customer: parsed,
+        staff: parsed,
+      };
+    }
+    return parsed;
   });
 
   const [logo, setLogo] = useState(() => {

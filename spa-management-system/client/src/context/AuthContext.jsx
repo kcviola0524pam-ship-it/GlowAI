@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo, useState } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
+import { readStoredJson } from '../utils/readStoredJson';
 
 const AuthContext = createContext(null);
 
@@ -11,18 +12,27 @@ const roleViews = {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem('gym_user');
-    return stored ? JSON.parse(stored) : null;
+  const [user, setUser] = useState(() => readStoredJson('gym_user', null));
+  const [token, setToken] = useState(() => {
+    const t = localStorage.getItem('gym_token');
+    if (!t || t === 'undefined' || t === 'null') return null;
+    return t;
   });
-  const [token, setToken] = useState(() => localStorage.getItem('gym_token'));
   const [authError, setAuthError] = useState('');
 
   const storeSession = (payload) => {
-    localStorage.setItem('gym_user', JSON.stringify(payload.user));
-    localStorage.setItem('gym_token', payload.token);
-    setUser(payload.user);
-    setToken(payload.token);
+    if (payload.user != null) {
+      localStorage.setItem('gym_user', JSON.stringify(payload.user));
+    } else {
+      localStorage.removeItem('gym_user');
+    }
+    if (payload.token != null && payload.token !== '') {
+      localStorage.setItem('gym_token', payload.token);
+    } else {
+      localStorage.removeItem('gym_token');
+    }
+    setUser(payload.user ?? null);
+    setToken(payload.token ?? null);
   };
 
   const login = async (credentials) => {
