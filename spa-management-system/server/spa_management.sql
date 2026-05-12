@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS customer (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   service VARCHAR(50) DEFAULT 'Nail Care',
-  walked_in DATE DEFAULT (CURRENT_DATE),
+  walked_in DATE DEFAULT CURRENT_DATE,
   visits INT DEFAULT 0,
   status ENUM('Active','Inactive') DEFAULT 'Active'
 );
@@ -16,8 +16,7 @@ CREATE TABLE IF NOT EXISTS checkins (
   id INT AUTO_INCREMENT PRIMARY KEY,
   customer_id INT NULL,
   checkin_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (customer_id) REFERENCES customer(id) ON DELETE CASCADE,
-  
+  FOREIGN KEY (customer_id) REFERENCES customer(id) ON DELETE CASCADE
 );
 
 -- Staff table
@@ -34,7 +33,7 @@ CREATE TABLE IF NOT EXISTS payments (
   id INT AUTO_INCREMENT PRIMARY KEY,
   customer_id INT NOT NULL,
   amount DECIMAL(10,2) NOT NULL,
-  payment_date DATE DEFAULT (CURRENT_DATE),
+  payment_date DATE DEFAULT CURRENT_DATE,
   FOREIGN KEY (customer_id) REFERENCES customer(id) ON DELETE CASCADE
 );
 

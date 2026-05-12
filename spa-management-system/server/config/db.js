@@ -1,10 +1,11 @@
 import mysql from 'mysql2';
 
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '', // adjust if you set a password
-  database: 'spa_management',
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306,
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'spa_management',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -14,7 +15,7 @@ pool.getConnection((err, connection) => {
   if (err) {
     console.error('❌ Database connection failed:', err);
   } else {
-    console.log('✅ Connected to MySQL database (pool)');
+    console.log(`✅ Connected to MySQL database at ${process.env.DB_HOST || 'localhost'}`);
     connection.release();
   }
 });

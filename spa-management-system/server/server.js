@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
 
 import customerRoutes from './routes/customer.js';
 import checkinRoutes from './routes/checkins.js';
@@ -16,6 +17,8 @@ import reportsRoutes from './routes/reports.js';
 import chatRoutes from './routes/chat.js';
 
 
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
