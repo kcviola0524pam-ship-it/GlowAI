@@ -24,17 +24,29 @@ if (process.env.NODE_ENV !== "production") {
 const app = express();
 
 /* =========================
-   CORS FIX (IMPORTANT)
+   CORS (cross-origin browser requests)
+   Set ALLOWED_ORIGINS on the host that runs this API (comma-separated),
+   e.g. https://glowai-management-system.onrender.com,https://your-app.railway.app
 ========================= */
+const defaultOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "https://glowai-management-system.onrender.com",
+];
+const fromEnv = (process.env.ALLOWED_ORIGINS || process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+const allowedOrigins = [...new Set([...defaultOrigins, ...fromEnv])];
+
 const corsOptions = {
-  origin: "https://glowai-management-system.onrender.com",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
+  origin: allowedOrigins,
+  methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
 
 /* =========================
    MIDDLEWARE
