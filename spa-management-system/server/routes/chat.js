@@ -1,6 +1,6 @@
 import express from 'express';
 import db from '../config/db.js';
-import { getOllamaResponse, formatMessagesForOllama } from '../services/ollama.js';
+import { getGroqResponse, formatMessagesForGroq } from '../services/groq.js';
 
 const router = express.Router();
 
@@ -281,7 +281,7 @@ router.post('/message', async (req, res) => {
                         // For admin, fetch business analytics data
                         fetchBusinessData((businessData) => {
                           fetchSystemData(userId, customerId, (systemData) => {
-                            processMessageWithOllama(
+                            processMessageWithGroq(
                               res,
                               sessionId,
                               userId,
@@ -301,7 +301,7 @@ router.post('/message', async (req, res) => {
                       } else {
                         // For regular users, use standard data
                         fetchSystemData(userId, customerId, (systemData) => {
-                          processMessageWithOllama(
+                          processMessageWithGroq(
                             res,
                             sessionId,
                             userId,
@@ -747,18 +747,16 @@ function createAppointmentBooking(customerId, bookingInfo, userId, callback) {
 }
 
 /**
- * Process message with Ollama and save response
+ * Process message with Groq and save response
  */
-async function processMessageWithOllama(res, sessionId, userId, userMessage, historyMessages, systemContext) {
+async function processMessageWithGroq(res, sessionId, userId, userMessage, historyMessages, systemContext) {
   try {
-    // Format messages for Ollama (exclude system messages, only user/assistant)
-    const conversationHistory = formatMessagesForOllama(
+    const conversationHistory = formatMessagesForGroq(
       historyMessages.filter(msg => msg.role !== 'system'),
-      20 // Last 20 messages for context
+      20
     );
 
-    // Add the current user message
-    const messagesForOllama = [
+    const messagesForGroq = [
       ...conversationHistory,
       {
         role: 'user',
@@ -766,8 +764,7 @@ async function processMessageWithOllama(res, sessionId, userId, userMessage, his
       }
     ];
 
-    // Get response from Ollama
-    const aiResponse = await getOllamaResponse(messagesForOllama, systemContext);
+    const aiResponse = await getGroqResponse(messagesForGroq, systemContext);
 
     // Check if AI response contains booking action (only for non-admin users)
     if (!systemContext.isAdmin && systemContext.customerInfo) {
@@ -861,9 +858,9 @@ async function processMessageWithOllama(res, sessionId, userId, userMessage, his
       }
     );
   } catch (error) {
-    console.error('Error processing message with Ollama:', error);
+    console.error('Error processing message with Groq:', error);
 
-    // Fallback response if Ollama fails
+    // Fallback response if Groq fails
     const fallbackResponse = "I apologize, but I'm having trouble connecting to the AI service right now. Please try again later or contact support.";
 
     // Save fallback response

@@ -1,64 +1,69 @@
 import axios from 'axios';
 
-// Ollama API configuration
-const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2'; // Default model, can be changed
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
 
 /**
- * Get response from Ollama with context
- * @param {Array} messages - Array of message objects with role and content
+ * Get response from Groq with context
+ * @param {Array} messages - Array of message objects with role and content (user/assistant only)
  * @param {Object} systemContext - System data to provide context
  * @returns {Promise<string>} - AI response
  */
-export async function getOllamaResponse(messages, systemContext = {}) {
+export async function getGroqResponse(messages, systemContext = {}) {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    throw new Error('GROQ_API_KEY is not set. Add it to your server environment variables.');
+  }
+
   try {
-    // Build system prompt with context
     const systemPrompt = buildSystemPrompt(systemContext);
-    
-    // Prepare messages for Ollama API
-    const ollamaMessages = [
-      {
-        role: 'system',
-        content: systemPrompt
-      },
-      ...messages
+
+    const groqMessages = [
+      { role: 'system', content: systemPrompt },
+      ...messages,
     ];
 
-    // Call Ollama API
     const response = await axios.post(
-      `${OLLAMA_BASE_URL}/api/chat`,
+      GROQ_API_URL,
       {
-        model: OLLAMA_MODEL,
-        messages: ollamaMessages,
-        stream: false
+        model: GROQ_MODEL,
+        messages: groqMessages,
+        temperature: 0.7,
+        max_tokens: 2048,
       },
       {
-        timeout: 60000 // 60 second timeout
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        timeout: 60000,
       }
     );
 
-    if (response.data && response.data.message && response.data.message.content) {
-      return response.data.message.content;
+    const content = response.data?.choices?.[0]?.message?.content;
+    if (content) {
+      return content;
     }
 
-    throw new Error('Invalid response from Ollama');
+    throw new Error('Invalid response from Groq');
   } catch (error) {
-    console.error('Ollama API Error:', error.message);
-    
-    // Fallback response if Ollama is not available
-    if (error.code === 'ECONNREFUSED' || error.code === 'ETIMEDOUT') {
-      throw new Error('Ollama service is not available. Please ensure Ollama is running on ' + OLLAMA_BASE_URL);
+    const groqMessage = error.response?.data?.error?.message;
+    console.error('Groq API Error:', groqMessage || error.message);
+
+    if (error.response?.status === 401) {
+      throw new Error('Invalid Groq API key. Check GROQ_API_KEY in your environment.');
     }
-    
-    throw error;
+    if (error.response?.status === 429) {
+      throw new Error('Groq rate limit reached. Please try again in a moment.');
+    }
+    if (error.code === 'ECONNREFUSED' || error.code === 'ETIMEDOUT') {
+      throw new Error('Could not reach Groq API. Check your network connection.');
+    }
+
+    throw new Error(groqMessage || error.message || 'Groq request failed');
   }
 }
 
-/**
- * Build system prompt with system context
- * @param {Object} systemContext - Context data from the system
- * @returns {string} - Formatted system prompt
- */
 function buildSystemPrompt(systemContext) {
   const {
     userInfo,
@@ -67,15 +72,13 @@ function buildSystemPrompt(systemContext) {
     appointments = [],
     customerAnalysis = null,
     businessData = null,
-    isAdmin = false
+    isAdmin = false,
   } = systemContext;
 
-  // Admin users get business-focused, concise prompts
   if (isAdmin && userInfo?.role === 'admin') {
     return buildAdminPrompt(systemContext);
   }
 
-  // Customer-facing prompt
   let prompt = `You are a helpful AI assistant for a spa management system in the Philippines. Your role is to assist users with:
 - Answering questions about spa services
 - Providing recommendations based on customer history
@@ -85,12 +88,10 @@ function buildSystemPrompt(systemContext) {
 
 Be friendly, professional, and concise, also use a Filipino accent.`;
 
-  // Add user context
   if (userInfo) {
     prompt += `\n\nCurrent User: ${userInfo.name} (${userInfo.role})`;
   }
 
-  // Add customer context
   if (customerInfo) {
     prompt += `\n\nCustomer Information:
 - Name: ${customerInfo.name}
@@ -99,7 +100,6 @@ Be friendly, professional, and concise, also use a Filipino accent.`;
 - Status: ${customerInfo.status || 'Active'}`;
   }
 
-  // Add customer analysis
   if (customerAnalysis) {
     prompt += `\n\nCustomer Preferences:
 - Preferred Categories: ${JSON.stringify(customerAnalysis.preferred_categories || {})}
@@ -108,10 +108,9 @@ Be friendly, professional, and concise, also use a Filipino accent.`;
 - Booking Frequency: ${customerAnalysis.booking_frequency || 'N/A'}`;
   }
 
-  // Add available services
   if (services && services.length > 0) {
     prompt += `\n\nAvailable Services (use exact names when booking):`;
-    services.slice(0, 20).forEach(service => {
+    services.slice(0, 20).forEach((service) => {
       prompt += `\n- ${service.name} (${service.category}): PHP ${service.price} - ${service.duration_minutes} minutes`;
       if (service.description) {
         prompt += ` - ${service.description.substring(0, 100)}`;
@@ -119,18 +118,16 @@ Be friendly, professional, and concise, also use a Filipino accent.`;
     });
   }
 
-  // Add available staff if provided
   if (systemContext.staff && systemContext.staff.length > 0) {
     prompt += `\n\nAvailable Staff:`;
-    systemContext.staff.forEach(staff => {
+    systemContext.staff.forEach((staff) => {
       prompt += `\n- ${staff.name} (ID: ${staff.id})`;
     });
   }
 
-  // Add recent appointments
   if (appointments && appointments.length > 0) {
     prompt += `\n\nRecent Appointments:`;
-    appointments.slice(0, 10).forEach(apt => {
+    appointments.slice(0, 10).forEach((apt) => {
       prompt += `\n- ${apt.service} on ${apt.appointment_date} (${apt.status})`;
     });
   }
@@ -170,18 +167,8 @@ Remember to:
   return prompt;
 }
 
-/**
- * Build admin-focused system prompt for business analysis
- * @param {Object} systemContext - Context data from the system
- * @returns {string} - Formatted system prompt for admin
- */
 function buildAdminPrompt(systemContext) {
-  const {
-    userInfo,
-    businessData = {},
-    services = [],
-    appointments = []
-  } = systemContext;
+  const { businessData = {}, services = [] } = systemContext;
 
   let prompt = `You are a business intelligence AI assistant for a spa management system. Your role is to:
 - Analyze business data and provide actionable insights
@@ -198,7 +185,6 @@ Communication Style:
 - Keep responses brief and to the point
 - Use business terminology appropriately`;
 
-  // Add business analytics data
   if (businessData) {
     prompt += `\n\n=== BUSINESS ANALYTICS DATA ===\n`;
 
@@ -242,17 +228,17 @@ Communication Style:
     }
 
     if (businessData.servicePerformance) {
-      const services = businessData.servicePerformance;
+      const svcPerf = businessData.servicePerformance;
       prompt += `\nService Performance:\n`;
-      if (services.topServices && services.topServices.length > 0) {
+      if (svcPerf.topServices && svcPerf.topServices.length > 0) {
         prompt += `- Top Performing Services:\n`;
-        services.topServices.forEach((svc, idx) => {
+        svcPerf.topServices.forEach((svc, idx) => {
           prompt += `  ${idx + 1}. ${svc.name}: ${svc.bookings} bookings, $${svc.revenue} revenue\n`;
         });
       }
-      if (services.underperformingServices && services.underperformingServices.length > 0) {
+      if (svcPerf.underperformingServices && svcPerf.underperformingServices.length > 0) {
         prompt += `- Underperforming Services:\n`;
-        services.underperformingServices.forEach((svc, idx) => {
+        svcPerf.underperformingServices.forEach((svc, idx) => {
           prompt += `  ${idx + 1}. ${svc.name}: ${svc.bookings} bookings\n`;
         });
       }
@@ -279,11 +265,10 @@ Communication Style:
     }
   }
 
-  // Add available services summary
   if (services && services.length > 0) {
     prompt += `\n\nAvailable Services: ${services.length} total services`;
     const categories = {};
-    services.forEach(svc => {
+    services.forEach((svc) => {
       categories[svc.category] = (categories[svc.category] || 0) + 1;
     });
     prompt += `\nService Categories: ${Object.keys(categories).join(', ')}`;
@@ -302,22 +287,20 @@ When analyzing data:
 }
 
 /**
- * Get conversation history for context
+ * Format conversation history for the chat API
  * @param {Array} messages - Array of message objects from database
  * @param {number} maxMessages - Maximum number of messages to include
- * @returns {Array} - Formatted messages for Ollama
+ * @returns {Array}
  */
-export function formatMessagesForOllama(messages, maxMessages = 20) {
+export function formatMessagesForGroq(messages, maxMessages = 20) {
   if (!messages || messages.length === 0) {
     return [];
   }
 
-  // Get the most recent messages
   const recentMessages = messages.slice(-maxMessages);
 
-  return recentMessages.map(msg => ({
+  return recentMessages.map((msg) => ({
     role: msg.role === 'assistant' ? 'assistant' : 'user',
-    content: msg.content
+    content: msg.content,
   }));
 }
-
