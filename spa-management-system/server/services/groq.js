@@ -191,9 +191,9 @@ Communication Style:
     if (businessData.salesData) {
       const sales = businessData.salesData;
       prompt += `\nSales Performance:\n`;
-      if (sales.totalRevenue) prompt += `- Total Revenue: $${sales.totalRevenue}\n`;
+      if (sales.totalRevenue) prompt += `- Total Revenue: PHP${sales.totalRevenue}\n`;
       if (sales.totalTransactions) prompt += `- Total Transactions: ${sales.totalTransactions}\n`;
-      if (sales.averageTransaction) prompt += `- Average Transaction Value: $${sales.averageTransaction}\n`;
+      if (sales.averageTransaction) prompt += `- Average Transaction Value: PHP${sales.averageTransaction}\n`;
       if (sales.revenueGrowth) prompt += `- Revenue Growth: ${sales.revenueGrowth}%\n`;
     }
 
@@ -233,7 +233,7 @@ Communication Style:
       if (svcPerf.topServices && svcPerf.topServices.length > 0) {
         prompt += `- Top Performing Services:\n`;
         svcPerf.topServices.forEach((svc, idx) => {
-          prompt += `  ${idx + 1}. ${svc.name}: ${svc.bookings} bookings, $${svc.revenue} revenue\n`;
+          prompt += `  ${idx + 1}. ${svc.name}: ${svc.bookings} bookings, PHP${svc.revenue} revenue\n`;
         });
       }
       if (svcPerf.underperformingServices && svcPerf.underperformingServices.length > 0) {
@@ -258,9 +258,9 @@ Communication Style:
     if (businessData.revenueTrends) {
       const trends = businessData.revenueTrends;
       prompt += `\nRevenue Trends:\n`;
-      if (trends.dailyAverage) prompt += `- Daily Average: $${trends.dailyAverage}\n`;
-      if (trends.weeklyAverage) prompt += `- Weekly Average: $${trends.weeklyAverage}\n`;
-      if (trends.monthlyAverage) prompt += `- Monthly Average: $${trends.monthlyAverage}\n`;
+      if (trends.dailyAverage) prompt += `- Daily Average: PHP${trends.dailyAverage}\n`;
+      if (trends.weeklyAverage) prompt += `- Weekly Average: PHP${trends.weeklyAverage}\n`;
+      if (trends.monthlyAverage) prompt += `- Monthly Average: PHP${trends.monthlyAverage}\n`;
       if (trends.growthTrend) prompt += `- Growth Trend: ${trends.growthTrend}\n`;
     }
   }
@@ -281,7 +281,8 @@ When analyzing data:
 3. Quantify potential impact where possible
 4. Prioritize recommendations by impact and feasibility
 5. Use data to support all conclusions
-6. Be concise - aim for 3-5 key points per response`;
+6. Be concise - aim for 3-5 key points per response
+7. Always use Philippine Pesos (PHP) for all financial data`;
 
   return prompt;
 }
